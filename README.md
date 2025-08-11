@@ -18,12 +18,11 @@ Bu proje, Python ile geliştirilmiş, Counter-Strike 2(CS2) için tasarlanmış 
 
 2.  **Kurulum Adımları:**
     ```bash
-    # Bu depoyu klonlayın (GitHub'a yüklendikten sonra)
-    # git clone https://github.com/your-username/VectrisDevHack.git
-    # cd VectrisDevHack
+    git clone https://github.com/eren0isik/gloria.git
+    cd gloria
 
     # Gerekli kütüphaneleri yükleyin (requirements.txt dosyası oluşturulacaktır)
-    # pip install -r requirements.txt
+    pip install -r requirements.txt
     ```
 
 ## Kullanım
