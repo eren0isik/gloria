@@ -1,0 +1,21 @@
+{
+    "esp_rendering": 1,
+    "esp_mode": 1,
+    "line_rendering": 0,
+    "hp_bar_rendering": 1,
+    "head_hitbox_rendering": 1,
+    "bons": 1,
+    "nickname": 1,
+    "radius": 5000,
+    "keyboard": "alt",
+    "aim_active": 1,
+    "aim_mode": 1,
+    "aim_mode_distance": 1,
+    "aim_smoothing": 0.0,
+    "trigger_bot_active": 1,
+    "keyboards": "alt",
+    "trigger_delay_ms": 0.0,
+    "weapon": 1,
+    "bomb_esp": 1,
+    "fov": 120.0
+}
