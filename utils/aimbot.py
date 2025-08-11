@@ -99,7 +99,8 @@ def get_enemy_target_pos(memf, enemy_pawn, offsets) -> Vector3:
     # First, try to get the precise head position
     try:
         game_scene_node = memf.ReadPointer(enemy_pawn, offsets.m_pGameSceneNode)
-        bone_matrix_addr = memf.ReadPointer(game_scene_node, offsets.m_modelState) + 128 # m_boneArray
+
+        bone_matrix_addr = memf.ReadPointer(game_scene_node + offsets.m_modelState, offsets.m_boneArray) # Use m_boneArray from offsets
         base = bone_matrix_addr + 6 * 32 # Head bone index * size
         head_pos = Vector3(
             memf.ReadFloat(base, 0x0),
@@ -108,7 +109,7 @@ def get_enemy_target_pos(memf, enemy_pawn, offsets) -> Vector3:
         )
         if abs(head_pos.x) < 100000 and abs(head_pos.y) < 100000 and abs(head_pos.z) < 100000:
             return head_pos
-    except Exception:
+    except Exception as e:
         pass # If it fails, proceed to the fallback
 
     # Fallback: If head bone fails, aim at the player's origin, adjusting for crouch
@@ -118,7 +119,7 @@ def get_enemy_target_pos(memf, enemy_pawn, offsets) -> Vector3:
         is_crouching = (flags & (1 << 1)) != 0
         z_offset = 40.0 if is_crouching else 60.0 # Use a lower offset for crouched players
         return Vector3(enemy_origin.x, enemy_origin.y, enemy_origin.z + z_offset)
-    except Exception:
+    except Exception as e:
         return None
 
 # --- Main Aimbot Logic ---
@@ -164,6 +165,7 @@ def aimbot_logic(memf, client_dll, offsets, settings):
                 if health > 0 and team != my_team and life_state == 256:
                     enemy_target_pos = get_enemy_target_pos(memf, enemy_pawn, offsets)
                     if not enemy_target_pos: continue
+                    
 
                     target_angles = calc_angles(my_pos, enemy_target_pos)
                     fov = compute_fov(current_angles, target_angles)
@@ -189,7 +191,6 @@ def aimbot_thread(memf: mem.memfuncs.memfunc, client_dll_base_address: int, anti
         aim_key_hex = KEY_MAP[key_name]
     else:
         aim_key_hex = ctypes.windll.user32.VkKeyScanA(ord(key_name.upper())) & 0xFF
-    print(f"[Aimbot] Aimbot hotkey is '{key_name}'. Using robust head targeting.")
 
     while not stop_event.is_set():
         try:
